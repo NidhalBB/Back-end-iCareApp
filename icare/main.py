@@ -31,7 +31,7 @@ def record_audio(ask=False):
         voice_data = ''
         if ask:
             speak(ask)
-        audio = r.listen(source, 5, 5)  # listen for the audio via source
+        audio = r.listen(source, 10, 10)  # listen for the audio via source
         print("Done Listening")
         
         try:
@@ -53,43 +53,60 @@ def speak(audio_string):
     os.remove(audio_file) # remove audio file
 
 def respond(voice_data):
-    if'what is your name'in voice_data:
-        speak('My Name is Test')
+    if there_exists(["what is your name","what's your name","tell me your name"]):
+        speak("My Name is Test. what's your name?")
+    if there_exists(["my name is"]):
+        speak("nice to meet you i will remember that ,so do you want to eat or watch something!")
+        
+    if there_exists(["eat"]):
+        speak("Here are some of the foods I recommend for you today")
+    
+    if there_exists(["watch"]):
+        speak("What if we remember the old days and watch the Titanic ! ")
+    
     if there_exists(["what's the time","tell me the time","what time is it","what is the time"]):
         speak(ctime())
-    if 'hello'in voice_data:
+
+    if there_exists(['hey','hi','hello','Good morning','Good afternoon','Good evening']):
         speak("What's your mood today?")
-        voice_data = record_audio() 
-        return mood(voice_data)
+
+    elif there_exists(['happy','nice']):
+        speak("What if we go to walk ?")
+
+    elif there_exists(["sick","got cold","got a temperatare"]):
+        speak('Do you want me to call a doctor ?')
+    elif there_exists(['hungry']):
+        speak('Do you want to eat some delicious food')
+    elif there_exists(["bad","sad","ugly","angry","i'm not ok","stressed","upset"]):
+        speak('what if we read some books !')
+
+
+    if "yes" in voice_data:
+        print('call doctor')
+    elif "no" in voice_data:
+        speak('so try to eat some healthy food')
+
+    if there_exists(["it's good outside"]):
+        search_term = voice_data.split("for")[-1]
+        url = "https://www.google.com/search?sxsrf=ACYBGNSQwMLDByBwdVFIUCbQqya-ET7AAA%3A1578847393212&ei=oUwbXtbXDN-C4-EP-5u82AE&q=weather&oq=weather&gs_l=psy-ab.3..35i39i285i70i256j0i67l4j0i131i67j0i131j0i67l2j0.1630.4591..5475...1.2..2.322.1659.9j5j0j1......0....1..gws-wiz.....10..0i71j35i39j35i362i39._5eSPD47bv8&ved=0ahUKEwiWrJvwwP7mAhVfwTgGHfsNDxsQ4dUDCAs&uact=5"
+        webbrowser.get().open(url)
+        speak("I think it's a good day,but you can do some excercise in you'r room")
+
+
     if'search'in voice_data:
         search = record_audio('what do you want to search for ?')
         url = 'https://google.com/search?q=' + search
         webbrowser.get().open(url)
         speak('Here is what I found for ' + search)
-    if 'say hello'in voice_data:
-        speak('hello')   
+    
+    if there_exists(["what is my exact location"]):
+        url = "https://www.google.com/maps/search/Where+am+I+?/"
+        webbrowser.get().open(url)
+        speak("You must be somewhere near here, as per Google maps")
     if there_exists(["exit", "quit", "goodbye"]):
-        speak("going offline")
+        speak("Have a nice day ,good bye")
         exit()
 
-def there_exists1(terms):
-    for term in terms:
-        if term in voice_data1:
-            return True
-def mood(voice_data):
-    if 'happy' in voice_data:
-        speak("What if we go to walk ?")
-        if 'Is the weather good today to walk ?' in voice_data:
-            speak("I think it's good but if isn't you can do some excercise in you'r room")
-        #elif there_exists(["bad","sad","ugly","angry","i'm not ok","stressed","upset"]):
-    if there_exists(["hungry"]):
-        speak('Do you want to eat some delicious food')
-    if there_exists(["sick","got cold","got a temperatare"]):
-        speak('Do you want me to call a doctor ?')
-        if "yes" in voice_data:
-            print('call doctor')
-        else:
-            speak('Try to eat some healthy food')
 
 time.sleep(1)
 currentTime = datetime.datetime.now()
